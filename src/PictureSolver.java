@@ -1,5 +1,3 @@
-package pictures;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,10 +34,11 @@ public class PictureSolver {
 
             overlappingMap.put(pictureChar, overlappingPictures);
         }
+        return overlappingMap;
     }
 
     private List<Character> overlapSequence(HashMap<Character, HashSet<Character>> overlapMap) {
-        for()
+        overlapMap.values();
     }
 
     private void writeSolution(List<Character> overlapOrder) {
