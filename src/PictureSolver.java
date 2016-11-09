@@ -1,44 +1,42 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PictureSolver {
 
     public void solve() {
-        HashMap<Character, HashSet<Character>> overlappingPictures = overlappingPicturesMap(null, null);
-        List<Character> overlapOrder = overlapSequence(overlappingPictures);
+        HashMap<Character, Set<Character>> overlappingPictures = overlappingPicturesMap(null, null);
+        List<Character> overlapOrder = overlapSequence(overlappingPictures, new ArrayList<>());
         writeSolution(overlapOrder);
     }
 
-    private HashMap<Character, HashSet<Character>> overlappingPicturesMap(ArrayList<Picture> pictures, Picture finalPicture) {
-        HashMap<Character, HashSet<Character>> overlappingMap = new HashMap<>();
+    private HashMap<Character, Set<Character>> overlappingPicturesMap(ArrayList<Picture> pictures, Picture finalPicture) {
+        HashMap<Character, Set<Character>> overlappingMap = new HashMap<>();
         List<Point> pointQueue;
 
         char pictureChar;
 
         for(Picture picture : pictures) {
 
-            HashSet<Character> overlappingPictures = new HashSet<>();
+            Set<Character> overlappingPictures = picture.pointsCovered().parallelStream()
+                                    .filter(point -> (finalPicture.at(point) != picture.getLetter()))
+                                    .map(finalPicture::at)
+                                    .collect(Collectors.toSet());
 
-            pointQueue = picture.pointsCovered();
-            pictureChar = picture.getLetter();
-
-
-            for(Point point : pointQueue) {
-
-                if(finalPicture.at(point) != pictureChar) {
-                    overlappingPictures.add(finalPicture.at(point));
-                }
-            }
-
-            overlappingMap.put(pictureChar, overlappingPictures);
+            overlappingMap.put(picture.getLetter(), overlappingPictures);
         }
         return overlappingMap;
     }
 
-    private List<Character> overlapSequence(HashMap<Character, HashSet<Character>> overlapMap) {
-        overlapMap.values();
+    private List<Character> overlapSequence(HashMap<Character, Set<Character>> overlapMap, List<Character> overlapOrder) {
+
+        if(overlapMap.isEmpty()) {
+            return overlapOrder;
+        }
+
+        Character topLayerChar;
+
+
+        return overlapSequence(overlapMap, overlapOrder);
     }
 
     private void writeSolution(List<Character> overlapOrder) {
