@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,14 +35,28 @@ public class PictureSolver {
             return overlapOrder;
         }
 
-        Character topLayerChar;
+        Character topLayerChar = ' ';
+        int minListLen = Integer.MAX_VALUE;
 
+        for(Character currentLayer : overlapMap.keySet()) {
+            if(overlapMap.get(currentLayer).size() < minListLen) {
+                topLayerChar = currentLayer;
+                minListLen = overlapMap.get(currentLayer).size();
+            }
+        }
+
+        overlapOrder.add(0, topLayerChar); //add the top layer to the front so it gets pushed to the back as layers peel off
+        overlapMap.remove(topLayerChar);
 
         return overlapSequence(overlapMap, overlapOrder);
     }
 
-    private void writeSolution(List<Character> overlapOrder) {
-
+    private void writeSolution(List<Character> overlapOrder) throws FileNotFoundException {
+        PrintWriter writer = new PrintWriter("hw10out.txt");
+        for(Character layer : overlapOrder) {
+            writer.print(layer);
+        }
+        writer.flush();
     }
 
 }
