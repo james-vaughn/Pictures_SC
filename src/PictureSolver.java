@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 public class PictureSolver {
 
-    public void solve() {
+    public void solve() throws FileNotFoundException {
         HashMap<Character, Set<Character>> overlappingPictures = overlappingPicturesMap(null, null);
         List<Character> overlapOrder = overlapSequence(overlappingPictures, new ArrayList<>());
         writeSolution(overlapOrder);
