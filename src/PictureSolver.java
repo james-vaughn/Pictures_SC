@@ -51,12 +51,5 @@ public class PictureSolver {
         return overlapSequence(overlapMap, overlapOrder);
     }
 
-    private void writeSolution(List<Character> overlapOrder) throws FileNotFoundException {
-        PrintWriter writer = new PrintWriter("hw10out.txt");
-        for(Character layer : overlapOrder) {
-            writer.print(layer);
-        }
-        writer.flush();
-    }
 
 }
