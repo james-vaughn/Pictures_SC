@@ -22,7 +22,7 @@ public class Writer {
     }
 
     //throw an error if the writer cannot write as there is no alternative
-    private void writeSolution(List<Character> overlapOrder) throws FileNotFoundException {
+    public void writeSolution(List<Character> overlapOrder) throws FileNotFoundException {
         try {
             PrintWriter writer = new PrintWriter(outputFile);
             for (Character layer : overlapOrder) {
@@ -36,7 +36,7 @@ public class Writer {
         }
     }
 
-    private void writeError() throws FileNotFoundException {
+    public void writeError() throws FileNotFoundException {
         try {
             writer = new PrintWriter(outputFile);
             writer.println("Error");

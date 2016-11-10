@@ -8,7 +8,7 @@ public class PictureSolver {
     public void solve() throws FileNotFoundException {
         HashMap<Character, Set<Character>> overlappingPictures = overlappingPicturesMap(null, null);
         List<Character> overlapOrder = overlapSequence(overlappingPictures, new ArrayList<>());
-        writeSolution(overlapOrder);
+        Writer.getInstance().writeSolution(overlapOrder);
     }
 
     private HashMap<Character, Set<Character>> overlappingPicturesMap(ArrayList<Picture> pictures, Picture finalPicture) {
