@@ -2,6 +2,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 //Input processor serves as a barricade, handling all potential input errors
+//Singleton class
 public class InputProcessor {
 
     private static final InputProcessor INPUT_PROCESSOR_INSTANCE = new InputProcessor();
@@ -69,6 +70,7 @@ public class InputProcessor {
     }
 
     private boolean isPicture(String inputLine) {
+		//matches character or dot, then any number of (space then number or dot)
         String pictureRegex = "^([A-Z]|\\.)( (\\.|[A-Z]))*$";
         Pattern picturePattern = Pattern.compile(pictureRegex);
         Matcher pictureMatcher = picturePattern.matcher(inputLine);

@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
+//handles validation and creation of Picture objects to send the solver
+//Singleton class
 public class PictureProcessor {
 
     private int _rowCount = 0;
