@@ -55,7 +55,7 @@ public class WriterTest {
     //structured basis
     //full coverage
     @Test
-    public void Should_properly_log_the_error_and_write_to_the_file() throws IOException {
+    public void writeErrorTest() throws IOException {
         Writer.getInstance().writeError("Error Message");
         _fileReader = new Scanner(new File("hw10out.txt"));
 

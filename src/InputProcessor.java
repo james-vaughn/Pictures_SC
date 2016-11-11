@@ -23,7 +23,7 @@ public class InputProcessor {
         if (isLineIndicatingGridSize() ) {
             handleDimensions(inputLine);
         } else if(inputLine.equals(LINE_SEPARATOR) ) {
-            processEmptyLine(inputLine);
+            processEmptyLine();
         } else {
             handlePictureLines(inputLine);
         }
@@ -32,7 +32,7 @@ public class InputProcessor {
 
     private void validateLine(String inputLine) {
         if( inputLine == null ) {
-            Writer.getInstance().writeError();
+            Writer.getInstance().writeError("Cannot process null lines");
         }
     }
 
@@ -45,7 +45,7 @@ public class InputProcessor {
         if (isDimension(inputLine) ) {
             sendDimensionToProcessing(inputLine);
         } else {
-            Writer.getInstance().writeError();
+            Writer.getInstance().writeError("Non-dimension found on line "+_lineIndex);
         }
     }
 
@@ -66,7 +66,7 @@ public class InputProcessor {
         if ( isPicture(inputLine) ) {
             sendPictureToProcessing(inputLine);
         } else {
-            Writer.getInstance().writeError();
+            Writer.getInstance().writeError("Invalid picture line at "+_lineIndex);
         }
     }
 
@@ -82,7 +82,7 @@ public class InputProcessor {
         PictureProcessor.getInstance().processPictureLine(inputLine);
     }
 
-    private void processEmptyLine(String inputLine) {
+    private void processEmptyLine() {
         PictureProcessor.getInstance().processEmptyLine();
     }
 }

@@ -59,7 +59,7 @@ public class PictureProcessor {
 
     public void processPictureLine(String inputLine) {
         if (_shouldBeEmptyLine) {
-            WRITER_INSTANCE.writeError();
+            WRITER_INSTANCE.writeError("Non-empty line found when expecting an empty line");
         }
         String pictureLine = inputLine.replaceAll("\\s+","");
         validatePictureWidth(pictureLine);
@@ -83,20 +83,20 @@ public class PictureProcessor {
 
     private void validatePictureWidth(String pictureLine) {
         if (pictureLine.length() != _colCount) {
-            WRITER_INSTANCE.writeError();
+            WRITER_INSTANCE.writeError("Picture found which unexpected column width");
         }
     }
 
     private void validatePictureHeight() {
         // First row indexed at 0, first column indexed at 1
         if (_pictureRowIndex > (_rowCount) ) {
-            WRITER_INSTANCE.writeError();
+            WRITER_INSTANCE.writeError("Picture found with unexpected height");
         }
     }
 
     public void processEmptyLine() {
         if (!_shouldBeEmptyLine) {
-            WRITER_INSTANCE.writeError();
+            WRITER_INSTANCE.writeError("Missing an empty line separator");
         } else {
             _shouldBeEmptyLine = false;
         }
@@ -109,9 +109,9 @@ public class PictureProcessor {
 
     private void validatePictureList() {
         if (_pictures.size() < 1) {
-            WRITER_INSTANCE.writeError();
+            WRITER_INSTANCE.writeError("Too few pictures found");
         } else if (_finalPicture == null) {
-            WRITER_INSTANCE.writeError();
+            WRITER_INSTANCE.writeError("Missing the final picture");
         }
     }
 
@@ -156,7 +156,7 @@ public class PictureProcessor {
             _letters.add(pictureLetter);
             return pictureLetter;
         } else {
-            WRITER_INSTANCE.writeError();
+            WRITER_INSTANCE.writeError("A picture which should have 1 has a different number of letters");
         }
         // Vertical bar represents method failed
         return '|';
@@ -168,7 +168,7 @@ public class PictureProcessor {
             // Hyphen represents that this picture is a stacked picture
             return '-';
         } else {
-            WRITER_INSTANCE.writeError();
+            WRITER_INSTANCE.writeError("The final picture is missing some letters");
         }
         // Vertical bar represents method failed
         return '|';
