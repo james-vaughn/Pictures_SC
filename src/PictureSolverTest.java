@@ -2,6 +2,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
@@ -53,7 +54,8 @@ public class PictureSolverTest {
     @Test
     public void Should_yield_correct_answer_to_problem() throws FileNotFoundException {
         PictureSolver.getInstance().solve(_pictures, _finalPicture);
-        //make reader
+        Scanner fileReader = new Scanner(new File("hw10out.txt")); //make reader
+        assertEquals("BCA", fileReader.nextLine());
     }
 
     //bad data not possible because of barricades
@@ -98,11 +100,5 @@ public class PictureSolverTest {
     @Test(expected = NullPointerException.class)
     public void Should_error_if_overlap_order_list_is_null() {
         _exposer.overlapSequenceExposed(_overlayMap, null);
-    }
-
-
-    @After
-    public void tearDown() {
-
     }
 }
