@@ -8,8 +8,7 @@ public class PictureProcessor {
     private int _rowCount = 0;
     private int _colCount = 0;
 
-    private static final PictureProcessor PICTURE_PROCESSOR_INSTANCE =
-            new PictureProcessor();
+    private static final PictureProcessor PICTURE_PROCESSOR_INSTANCE = new PictureProcessor();
 
     //stores index of picture being processed
     private int _pictureIndex = 0;
@@ -18,13 +17,11 @@ public class PictureProcessor {
     private int _lineIndex = 0;
 
     private Boolean _shouldBeEmptyLine = false;
-
     private ArrayList<Picture> _pictures = new ArrayList<>();
-
-    private TemporaryPicture CURRENT_PICTURE;
+    private TemporaryPicture _currPicture;
 
     private PictureProcessor() {
-        CURRENT_PICTURE = new TemporaryPicture();
+        _currPicture = new TemporaryPicture();
     }
 
     public static PictureProcessor getInstance() {
@@ -33,11 +30,12 @@ public class PictureProcessor {
 
     public void processDimensionLine(String inputLine) {
         int lineNumber = InputProcessor.getInstance()._lineIndex;
+
         if (lineNumber == 1) {
             _rowCount = Integer.parseInt(inputLine);
             //TODO remove debug output
             //System.out.println("// Number of rows set to: " + _rowCount);
-        } else if (lineNumber == 2) {
+        } else {
             _colCount = Integer.parseInt(inputLine);
             //TODO remove debug output
             //System.out.println("// Number of columns set to: " + _colCount);
@@ -45,18 +43,24 @@ public class PictureProcessor {
     }
 
     public void processPictureLine(String inputLine) {
+        if (_shouldBeEmptyLine){
+            //TODO report error
+            System.out.println("// Received picture line when an " +
+                    "empty line was expected");
+        }
+
         String lineWithoutSpaces = inputLine.replaceAll("\\s+","");
         ArrayList<String> pictureLine =
                 new ArrayList<String>(Arrays.asList(lineWithoutSpaces.split("") ) );
         validatePictureWidth(pictureLine);
         validatePictureHeight();
-        CURRENT_PICTURE.TEMP_PIC_LINES.add(_lineIndex, pictureLine);
+        _currPicture.lines.add(_lineIndex, pictureLine);
         System.out.println("// Picture Row Index: " + _lineIndex +
-                " Temp Picture List: " + CURRENT_PICTURE.TEMP_PIC_LINES);
+                " Temp Picture List: " + _currPicture.lines);
 
         // If this is the last row of the picture (+1 is because the
         //  indices start at different values)
-        if ( (_lineIndex + 1 ) == _rowCount) {
+        if ( _lineIndex == (_rowCount - 1) ) {
             _shouldBeEmptyLine = true;
             createNewPicture();
         }
@@ -97,7 +101,7 @@ public class PictureProcessor {
         //TODO check if _pictureIndex matches _pictures index
         _pictureIndex++;
         // Clears the matrix in the temporary picture
-        CURRENT_PICTURE.TEMP_PIC_LINES = new ArrayList<ArrayList<String>>();
+        _currPicture.lines = new ArrayList<>();
         // Resets the row index for the next new picture
         _lineIndex = -1;
         printAllPictures();
@@ -114,7 +118,7 @@ public class PictureProcessor {
     private char[][] processTemporaryMatrix() {
         char[][] pictureMatrix = new char[_rowCount][_colCount];
         ArrayList<ArrayList<String>> listOfTemporaryLines =
-                CURRENT_PICTURE.TEMP_PIC_LINES;
+                _currPicture.lines;
 
         for (int i = 0; i < listOfTemporaryLines.size(); i++) {
             for (int k = 0; k < listOfTemporaryLines.get(i).size(); k++) {
@@ -136,10 +140,10 @@ public class PictureProcessor {
     }
 
     public class TemporaryPicture {
-        private ArrayList<ArrayList<String>> TEMP_PIC_LINES;
+        private ArrayList<ArrayList<String>> lines;
 
         public TemporaryPicture() {
-            TEMP_PIC_LINES = new ArrayList<ArrayList<String>>();
+            lines = new ArrayList<>();
         }
     }
 }

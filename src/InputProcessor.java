@@ -21,11 +21,11 @@ public class InputProcessor {
     public void processFileLine(String inputLine) {
         validateLine(inputLine);
         if (isLineIndicatingGridSize() ) {
-            examinePossibleDimension(inputLine);
+            handleDimensions(inputLine);
         } else if(inputLine.equals(LINE_SEPARATOR) ) {
             processEmptyLine(inputLine);
         } else {
-            examinePossiblePicture(inputLine);
+            handlePictureLines(inputLine);
         }
         _lineIndex++;
     }
@@ -39,7 +39,7 @@ public class InputProcessor {
         return ((_lineIndex == 1) || (_lineIndex == 2) );
     }
 
-    private void examinePossibleDimension(String inputLine) {
+    private void handleDimensions(String inputLine) {
         if (isDimension(inputLine) ) {
             sendDimensionToProcessing(inputLine);
         } else {
@@ -50,8 +50,9 @@ public class InputProcessor {
 
     // Returns true if every character is a number
     private boolean isDimension(String inputLine) {
-        String DIMENSION_REGEX = "^[0-9]+$"; //matches only lines with one or more numbers
-        Pattern dimensionPattern = Pattern.compile(DIMENSION_REGEX);
+        //matches only lines with one or more numbers; doesnt allow starting with 0
+        String dimensionRegex = "^([1-9])([0-9]+)?$";
+        Pattern dimensionPattern = Pattern.compile(dimensionRegex);
         Matcher dimensionMatcher = dimensionPattern.matcher(inputLine);
         return dimensionMatcher.find();
     }
@@ -60,7 +61,7 @@ public class InputProcessor {
         PictureProcessor.getInstance().processDimensionLine(inputLine);
     }
 
-    private void examinePossiblePicture(String inputLine) {
+    private void handlePictureLines(String inputLine) {
         if ( isPicture(inputLine) ) {
             sendPictureToProcessing(inputLine);
         } else {

@@ -3,9 +3,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
 
-/**
- * Created by james on 11/10/16.
- */
 public class Writer {
 
     private static Writer WRITER_INSTANCE;

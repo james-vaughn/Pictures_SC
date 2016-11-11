@@ -1,12 +1,22 @@
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class PictureSolver {
 
-    public void solve() throws FileNotFoundException {
-        HashMap<Character, Set<Character>> overlappingPictures = overlappingPicturesMap(null, null);
+    private static final PictureSolver PICTURE_SOLVER_INSTANCE = new PictureSolver();
+
+    private PictureSolver() {
+
+    }
+
+    public static PictureSolver getInstance() {
+        return PICTURE_SOLVER_INSTANCE;
+    }
+
+    //solve should crash if we cannot write as writing the file is mission critical
+    public void solve(ArrayList<Picture> pictures, Picture finalPicture) throws FileNotFoundException {
+        HashMap<Character, Set<Character>> overlappingPictures = overlappingPicturesMap(pictures, finalPicture);
         List<Character> overlapOrder = overlapSequence(overlappingPictures, new ArrayList<>());
         Writer.getInstance().writeSolution(overlapOrder);
     }
@@ -51,5 +61,14 @@ public class PictureSolver {
         return overlapSequence(overlapMap, overlapOrder);
     }
 
+    public class Exposer {
 
+        public HashMap<Character, Set<Character>> overlappingPicturesMapExposed(ArrayList<Picture> pictures, Picture finalPicture) {
+            return overlappingPicturesMap(pictures, finalPicture);
+        }
+
+        public List<Character> overlapSequenceExposed(HashMap<Character, Set<Character>> overlapMap, List<Character> overlapOrder) {
+            return overlapSequence(overlapMap, overlapOrder);
+        }
+    }
 }
