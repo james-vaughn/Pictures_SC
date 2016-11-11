@@ -9,15 +9,16 @@ import static org.junit.Assert.*;
 public class WriterTest {
 
     private Scanner _fileReader;
-    private CharArrayReader _reader;
     private List<Character> _charList;
     private List<Character> _emptyList = new ArrayList<>();
     private ArrayList<Character> _nullList;
+    private ByteArrayOutputStream _errText = new ByteArrayOutputStream();
 
     @Before
     public void setUp() throws IOException {
         _charList = Arrays.asList('t','e','s','t');
         _fileReader = new Scanner(new File("hw10out.txt"));
+        System.setErr(new PrintStream(_errText));
     }
 
 
@@ -28,7 +29,6 @@ public class WriterTest {
     //full coverage
     @Test
     public void Should_properly_write_list_to_file() throws FileNotFoundException {
-
         Writer.getInstance().writeSolution(_charList);
         assertEquals(_fileReader.nextLine(), "test");
     }
@@ -55,10 +55,11 @@ public class WriterTest {
     //structured basis
     //full coverage
     @Test
-    public void writeErrorTest() throws IOException {
-        Writer.getInstance().writeError();
+    public void Should_properly_log_the_error_and_write_to_the_file() throws IOException {
+        Writer.getInstance().writeError("Error Message");
         _fileReader = new Scanner(new File("hw10out.txt"));
-        assertEquals(_fileReader.nextLine(), "Error");
 
+        assertEquals(_errText.toString(), "Error Message");
+        assertEquals(_fileReader.nextLine(), "Error");
     }
 }

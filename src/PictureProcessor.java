@@ -81,13 +81,13 @@ public class PictureProcessor {
         _pictureRowIndex++;
     }
 
-    public void validatePictureWidth(String pictureLine) {
+    private void validatePictureWidth(String pictureLine) {
         if (pictureLine.length() != _colCount) {
             WRITER_INSTANCE.writeError();
         }
     }
 
-    public void validatePictureHeight() {
+    private void validatePictureHeight() {
         // First row indexed at 0, first column indexed at 1
         if (_pictureRowIndex > (_rowCount) ) {
             WRITER_INSTANCE.writeError();
@@ -102,7 +102,7 @@ public class PictureProcessor {
         }
     }
 
-    public void processLastLine() {
+    private void processLastLine() {
         validatePictureList();
         PictureSolver.getInstance().solve(_pictures, _finalPicture);
     }

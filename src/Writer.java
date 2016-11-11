@@ -33,7 +33,8 @@ public class Writer {
         }
     }
 
-    public void writeError() {
+    public void writeError(String errorMessage) {
+        System.err.println(errorMessage);
         try {
             writer = new PrintWriter(outputFile);
             writer.println("Error");

@@ -38,7 +38,6 @@ public class Reader {
             if (i !=  (lengthOfTextFile - 1) ) {
                 inputProc.processFileLine(listOfLines.get(i) );
             } else {
-                System.out.println("LAST LINE OF FILE!!!!");
                 PictureProcessor.getInstance().setIsLastLineToTrue();
                 inputProc.processFileLine(listOfLines.get(i) );
             }
