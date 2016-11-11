@@ -33,20 +33,14 @@ public class PictureProcessor {
 
         if (lineNumber == 1) {
             _rowCount = Integer.parseInt(inputLine);
-            //TODO remove debug output
-            //System.out.println("// Number of rows set to: " + _rowCount);
         } else {
             _colCount = Integer.parseInt(inputLine);
-            //TODO remove debug output
-            //System.out.println("// Number of columns set to: " + _colCount);
         }
     }
-
+//////////////////////////////////////////////////////////////////////////////
     public void processPictureLine(String inputLine) {
         if (_shouldBeEmptyLine){
-            //TODO report error
-            System.out.println("// Received picture line when an " +
-                    "empty line was expected");
+            Writer.getInstance().writeError();
         }
 
         String lineWithoutSpaces = inputLine.replaceAll("\\s+","");
@@ -55,8 +49,6 @@ public class PictureProcessor {
         validatePictureWidth(pictureLine);
         validatePictureHeight();
         _currPicture.lines.add(_lineIndex, pictureLine);
-        System.out.println("// Picture Row Index: " + _lineIndex +
-                " Temp Picture List: " + _currPicture.lines);
 
         // If this is the last row of the picture (+1 is because the
         //  indices start at different values)
@@ -69,29 +61,22 @@ public class PictureProcessor {
 
     public void validatePictureWidth(ArrayList<String> pictureLine) {
         if (pictureLine.size() != _colCount) {
-            //TODO report fatal error
-            System.out.println("// Number of picture columns " +
-                    _colCount +
-                    " does not match line length " + pictureLine.size());
+            Writer.getInstance().writeError();
         }
     }
 
     public void validatePictureHeight() {
         // First row indexed at 0, first column indexed at 1
         if (_lineIndex > (_colCount) ) {
-            System.out.println("// Picture row " + _lineIndex +
-                    " is greater than the the specified number of columns");
-            //TODO report fatal error
+            Writer.getInstance().writeError();
         }
     }
 
     public void processEmptyLine() {
         if (!_shouldBeEmptyLine) {
-            System.out.println("// Empty line not expected");
-            //TODO report an error
+            Writer.getInstance().writeError();
         } else {
             _shouldBeEmptyLine = false;
-            System.out.println("// Empty line found in correct place");
         }
     }
 
@@ -123,10 +108,6 @@ public class PictureProcessor {
         for (int i = 0; i < listOfTemporaryLines.size(); i++) {
             for (int k = 0; k < listOfTemporaryLines.get(i).size(); k++) {
                 char c = listOfTemporaryLines.get(i).get(k).charAt(0);
-                //TODO remove debugging line
-                //System.out.println("//Row: " + i +
-                //                    " Column: " + k +
-                //                   " Char: " + c);
                 pictureMatrix[i][k] = c;
             }
         }

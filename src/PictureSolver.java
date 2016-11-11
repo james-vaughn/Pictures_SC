@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,7 +14,7 @@ public class PictureSolver {
     }
 
     //solve should crash if we cannot write as writing the file is mission critical
-    public void solve(ArrayList<Picture> pictures, Picture finalPicture) throws FileNotFoundException {
+    public void solve(ArrayList<Picture> pictures, Picture finalPicture) {
         HashMap<Character, Set<Character>> overlappingPictures = overlappingPicturesMap(pictures, finalPicture);
         List<Character> overlapOrder = overlapSequence(overlappingPictures, new ArrayList<>());
         Writer.getInstance().writeSolution(overlapOrder);
@@ -23,9 +22,6 @@ public class PictureSolver {
 
     private HashMap<Character, Set<Character>> overlappingPicturesMap(ArrayList<Picture> pictures, Picture finalPicture) {
         HashMap<Character, Set<Character>> overlappingMap = new HashMap<>();
-        List<Point> pointQueue;
-
-        char pictureChar;
 
         for(Picture picture : pictures) {
 
