@@ -2,6 +2,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -43,6 +45,20 @@ public class PictureSolverTest {
     }
 
 
+    //solve tests
+
+
+    //structured basis, good data
+    //full coverage
+    @Test
+    public void Should_yield_correct_answer_to_problem() throws FileNotFoundException {
+        PictureSolver.getInstance().solve(_pictures, _finalPicture);
+        //make reader
+    }
+
+    //bad data not possible because of barricades
+
+
     //overlappingPicturesMap tests
 
 
@@ -69,13 +85,21 @@ public class PictureSolverTest {
 
     //Structured basis, good data
     //full coverage
+    //tests all viable branches
     @Test
     public void Should_properly_compute_solution_list() {
         List<Character> solution = _exposer.overlapSequenceExposed(_overlayMap, new ArrayList<>());
         assertEquals(solution, Arrays.asList('B','C','A'));
     }
 
-    
+    //bad data
+    //since this method is private and handled only by solve, which doesnt allow bad data to slip through
+    //we do not handle bad data, so this will error
+    @Test(expected = NullPointerException.class)
+    public void Should_error_if_overlap_order_list_is_null() {
+        _exposer.overlapSequenceExposed(_overlayMap, null);
+    }
+
 
     @After
     public void tearDown() {
