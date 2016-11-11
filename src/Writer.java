@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Writer {
 
-    private static Writer WRITER_INSTANCE;
+    private static Writer WRITER_INSTANCE = new Writer();
     private final File outputFile;
     private final String fileName = "hw10out.txt";
     private PrintWriter writer;
@@ -21,7 +21,7 @@ public class Writer {
     //throw an error if the writer cannot write as there is no alternative
     public void writeSolution(List<Character> overlapOrder) throws FileNotFoundException {
         try {
-            PrintWriter writer = new PrintWriter(outputFile);
+            writer = new PrintWriter(outputFile);
             for (Character layer : overlapOrder) {
                 writer.print(layer);
             }
