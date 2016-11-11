@@ -61,5 +61,4 @@ public class WriterTest {
         assertEquals(_fileReader.nextLine(), "Error");
 
     }
-
 }

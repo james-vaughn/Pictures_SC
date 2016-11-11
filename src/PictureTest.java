@@ -10,62 +10,67 @@ import static org.junit.Assert.*;
 
 public class PictureTest {
 
-    private Picture zeroImage;
-    private char[][] zeroArray;
+    private Picture _badPicture;
+    private Picture _filledPicture;
 
-    private Picture emptyImage;
-
-    private Picture filledImage;
-    private char[][] filledArray;
-
-    private Point point00;
-    private Point point01;
-    private Point point10;
-    private Point point11;
+    private Point _topLeft;
+    private Point _topRight;
+    private Point _bottomLeft;
+    private Point _bottomRight;
 
     @Before
     public void setUp(){
-        zeroArray = new char[0][0];
-        zeroImage = new Picture('O',zeroArray);
+        char[][] charMatrixA = { ".A".toCharArray(),
+                                 ".A".toCharArray()
+                               };
 
-        filledArray=new char[2][2];
-        emptyImage=new Picture('B',filledArray);
+        _filledPicture =new Picture ('A',charMatrixA);
 
-        filledArray[0][0]='A';
-        filledArray[1][1]='A';
+        char[][] charMatrixBlank = new char[0][0];
 
-        filledImage=new Picture ('A',filledArray);
+        _badPicture = new Picture('-', charMatrixBlank);
 
-        point00=new Point(0,0);
-        point01=new Point(0,1);
-        point10=new Point(1,0);
-        point11=new Point(1,1);
+        _topLeft = new Point(0,0);
+        _topRight = new Point(0,1);
+        _bottomLeft = new Point(1,0);
+        _bottomRight = new Point(1,1);
     }
 
+    //pointsCovered tests
+
+    //structured basis
+    //full coverage
     @Test
-    public void atTester(){
-        //Test filledImage
-        assertTrue(filledImage.at(point00)=='A');
-        assertTrue(filledImage.at(point01)!='A');
-        assertTrue(filledImage.at(point10)!='A');
-        assertTrue(filledImage.at(point11)=='A');
-
-        //Test emptyImage
-        assertTrue(emptyImage.at(point00)!='B');
-        assertTrue(emptyImage.at(point01)!='B');
-        assertTrue(emptyImage.at(point10)!='B');
-        assertTrue(emptyImage.at(point11)!='B');
+    public void Should_return_only_points_with_letters(){
+        List<Point> points = _filledPicture.pointsCovered();
+        assertEquals(points.size(), 2);
+        assertEquals(points.get(0), _topRight);
+        assertEquals(points.get(1), _bottomRight);
     }
 
+    //bad data
+    //no picture contents
     @Test
-    public void pointsCoveredTest(){
-        List<Point> pointQueue = new ArrayList<>();
-        assertTrue(zeroImage.pointsCovered().equals(pointQueue));
-        assertTrue(emptyImage.pointsCovered().equals(pointQueue));
-        pointQueue.add(point00);
-        pointQueue.add(point11);
-        assertTrue(filledImage.pointsCovered().equals(pointQueue));
-
+    public void Should_return_empty_list_for_empty_pictures() {
+        assertEquals(_badPicture.pointsCovered(), new ArrayList<Point>());
     }
 
+
+    //at Tests
+
+
+    //structured basis full coverage
+    @Test
+    public void Should_yield_proper_chars_at_each_point_for_good_images() {
+        assertEquals(_filledPicture.at(_topLeft), '.');
+        assertEquals(_filledPicture.at(_topRight), 'A');
+        assertEquals(_filledPicture.at(_bottomLeft), '.');
+        assertEquals(_filledPicture.at(_bottomRight), 'A');
+    }
+
+    //bad data
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    public void Should_error_if_the_point_doesnt_exist_within_the_picture() {
+        _badPicture.at(_topLeft);
+    }
 }
