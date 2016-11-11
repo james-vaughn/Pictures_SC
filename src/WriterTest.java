@@ -1,64 +1,65 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.CharArrayReader;
-import java.io.FileReader;
+import java.io.*;
 import java.util.*;
 import static org.junit.Assert.*;
 
 
 public class WriterTest {
 
-    private FileReader fileReader;
-    private CharArrayReader reader;
-    private ArrayList<Character> charListHelloWorld;
-    private ArrayList<Character> charListEmpty;
+    private Scanner _fileReader;
+    private CharArrayReader _reader;
+    private List<Character> _charList;
+    private List<Character> _emptyList = new ArrayList<>();
+    private ArrayList<Character> _nullList;
 
     @Before
-    public void setUp(){
-        charListHelloWorld=new ArrayList<Character>();
-        charListHelloWorld.add('h');
-        charListHelloWorld.add('e');
-        charListHelloWorld.add('l');
-        charListHelloWorld.add('l');
-        charListHelloWorld.add('o');
-        charListHelloWorld.add(' ');
-        charListHelloWorld.add('w');
-        charListHelloWorld.add('o');
-        charListHelloWorld.add('r');
-        charListHelloWorld.add('l');
-        charListHelloWorld.add('d');
-        charListEmpty=new ArrayList<Character>();
+    public void setUp() throws IOException {
+        _charList = Arrays.asList('t','e','s','t');
+        _fileReader = new Scanner(new File("hw10out.txt"));
     }
 
+
+    //writeSolution tests
+
+
+    //Structured basis good data
+    //full coverage
     @Test
-    public void writeSolutionTestHelloWorld() throws Exception{
-        Writer.getInstance().writeSolution(charListHelloWorld);
-        fileReader=new FileReader("hw10out.txt");
-        reader=new CharArrayReader(charListHelloWorld.toString().toCharArray());
-        while (fileReader.ready()&&reader.ready()){
-            assertEquals(fileReader.read(), (reader.read()));
-        }
+    public void Should_properly_write_list_to_file() throws FileNotFoundException {
+
+        Writer.getInstance().writeSolution(_charList);
+        assertEquals(_fileReader.nextLine(), "test");
     }
 
+    //structured basis, boundary test
+    //testing with an empty list as a data structure boundary
     @Test
-    public void writeSolutionTestEmpty() throws Exception{
-        Writer.getInstance().writeSolution(charListEmpty);
-        fileReader=new FileReader("hw10out.txt");
-        reader=new CharArrayReader(charListEmpty.toString().toCharArray());
-        while (fileReader.ready()&&reader.ready()){
-            assertTrue(fileReader.read()==(reader.read()));
-        }
+    public void Should_write_nothing_if_list_is_empty() throws Exception{
+        Writer.getInstance().writeSolution(_emptyList);
+        assertFalse(_fileReader.hasNext());
     }
 
+    //bad data
+    //null list is never going to be passed in, however there is not an explicit condition preventing it
+    @Test(expected = NullPointerException.class)
+    public void Should_error_if_list_to_print_is_null() throws FileNotFoundException {
+        Writer.getInstance().writeSolution(_nullList);
+    }
+
+
+    // writeError tests
+
+
+    //structured basis
+    //full coverage
     @Test
-    public void writeErrorTest()throws Exception{
+    public void writeErrorTest() throws IOException {
         Writer.getInstance().writeError();
-        fileReader=new FileReader("hw10out.txt");
-        reader=new CharArrayReader("Error".toCharArray());
-        while (fileReader.ready()&&reader.ready()){
-            assertTrue(fileReader.read()==(reader.read()));
-        }
+        _fileReader = new Scanner(new File("hw10out.txt"));
+        assertEquals(_fileReader.nextLine(), "Error");
+
     }
 
 }
