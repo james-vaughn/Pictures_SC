@@ -1,6 +1,3 @@
-/**
- * Created by james on 11/8/16.
- */
 public class Point {
 
     public final int row, col;

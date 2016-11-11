@@ -37,7 +37,7 @@ public class WriterTest {
         fileReader=new FileReader("hw10out.txt");
         reader=new CharArrayReader(charListHelloWorld.toString().toCharArray());
         while (fileReader.ready()&&reader.ready()){
-            assertTrue(fileReader.read()==(reader.read()));
+            assertEquals(fileReader.read(), (reader.read()));
         }
     }
 
