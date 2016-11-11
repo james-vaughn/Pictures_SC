@@ -7,7 +7,7 @@ public class Writer {
 
     private static Writer WRITER_INSTANCE = new Writer();
     private final File outputFile;
-    private final String fileName = "hw10out.txt";
+    private final String fileName = "src/hw10out.txt";
     private PrintWriter writer;
 
     private Writer() {

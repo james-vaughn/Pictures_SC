@@ -8,7 +8,7 @@ public class Reader {
 
     //singleton
     private static final Reader READER_INSTANCE = new Reader();
-    private final static String INPUT_FILE_PATH = "src/Hw10in.txt";
+    private final static String INPUT_FILE_PATH = "src/hw10in.txt";
 
     private Reader() {
 
@@ -30,8 +30,19 @@ public class Reader {
     private void processInputFile(String filePath) throws IOException {
         BufferedReader fileReader = new BufferedReader(new FileReader(filePath));
 
-        List<String> fileLines = fileReader.lines().collect(Collectors.toList());
-        fileLines.forEach(line -> InputProcessor.getInstance().processFileLine(line) );
+        List<String> listOfLines = fileReader.lines().collect(Collectors.toList());
+        int lengthOfTextFile = listOfLines.size();
+        InputProcessor inputProc = InputProcessor.getInstance();
+        for (int i = 0; i < (lengthOfTextFile); i++) {
+            // If this is not the last line of the file
+            if (i !=  (lengthOfTextFile - 1) ) {
+                inputProc.processFileLine(listOfLines.get(i) );
+            } else {
+                System.out.println("LAST LINE OF FILE!!!!");
+                PictureProcessor.getInstance().setIsLastLineToTrue();
+                inputProc.processFileLine(listOfLines.get(i) );
+            }
+        }
 
     }
 }

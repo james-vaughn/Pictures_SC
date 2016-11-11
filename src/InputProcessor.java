@@ -31,7 +31,9 @@ public class InputProcessor {
     }
 
     private void validateLine(String inputLine) {
-        //TODO fill this
+        if( inputLine == null ) {
+            Writer.getInstance().writeError();
+        }
     }
 
     //the first 2 lines are the grid dimensions
@@ -43,8 +45,7 @@ public class InputProcessor {
         if (isDimension(inputLine) ) {
             sendDimensionToProcessing(inputLine);
         } else {
-            //TODO throw error that a non-dimension was found
-            // on line 1 or 2
+            Writer.getInstance().writeError();
         }
     }
 
@@ -65,8 +66,7 @@ public class InputProcessor {
         if ( isPicture(inputLine) ) {
             sendPictureToProcessing(inputLine);
         } else {
-            //TODO throw an error, this is an invalid line
-            System.out.println("Invalid line: " + inputLine);
+            Writer.getInstance().writeError();
         }
     }
 
@@ -83,8 +83,6 @@ public class InputProcessor {
     }
 
     private void processEmptyLine(String inputLine) {
-        //TODO remove this debug line
-        System.out.println("// Found empty line at line: " + _lineIndex);
         PictureProcessor.getInstance().processEmptyLine();
     }
 }
