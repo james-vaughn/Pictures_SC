@@ -8,16 +8,16 @@ import static org.junit.Assert.*;
 
 public class WriterTest {
 
-    private Scanner _fileReader;
     private List<Character> _charList;
     private List<Character> _emptyList = new ArrayList<>();
     private ArrayList<Character> _nullList;
+    private ByteArrayOutputStream _outText = new ByteArrayOutputStream();
     private ByteArrayOutputStream _errText = new ByteArrayOutputStream();
 
     @Before
     public void setUp() throws IOException {
         _charList = Arrays.asList('t','e','s','t');
-        _fileReader = new Scanner(new File("hw10out.txt"));
+        System.setOut(new PrintStream(_outText));
         System.setErr(new PrintStream(_errText));
     }
 
@@ -30,7 +30,7 @@ public class WriterTest {
     @Test
     public void Should_properly_write_list_to_file() throws FileNotFoundException {
         Writer.getInstance().writeSolution(_charList);
-        assertEquals(_fileReader.nextLine(), "test");
+        assertEquals(_outText.toString(), "test");
     }
 
     //structured basis, boundary test
@@ -38,7 +38,7 @@ public class WriterTest {
     @Test
     public void Should_write_nothing_if_list_is_empty() throws Exception{
         Writer.getInstance().writeSolution(_emptyList);
-        assertFalse(_fileReader.hasNext());
+        assertEquals(_outText.toString(), "");
     }
 
     //bad data
@@ -54,12 +54,10 @@ public class WriterTest {
 
     //structured basis
     //full coverage
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void writeErrorTest() throws IOException {
-        Writer.getInstance().writeError("Error Message");
-        _fileReader = new Scanner(new File("hw10out.txt"));
+        Writer.getInstance().writeError();
 
-        assertEquals(_errText.toString(), "Error Message");
-        assertEquals(_fileReader.nextLine(), "Error");
+        assertEquals(_errText.toString(), "Error");
     }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//reader handles reading in from stdin
 public class Reader {
 
     //singleton
@@ -19,7 +20,7 @@ public class Reader {
     }
 
     //main for whole program
-    public static void main(String [ ] args) {
+    public static void main(String[] args) {
         try {
             Reader.getInstance().processInputFile(INPUT_FILE_PATH);
         } catch (IOException e) {

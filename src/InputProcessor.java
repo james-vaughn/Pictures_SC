@@ -32,7 +32,7 @@ public class InputProcessor {
 
     private void validateLine(String inputLine) {
         if( inputLine == null ) {
-            Writer.getInstance().writeError("Cannot process null lines");
+            Writer.getInstance().writeError();
         }
     }
 
@@ -45,7 +45,7 @@ public class InputProcessor {
         if (isDimension(inputLine) ) {
             sendDimensionToProcessing(inputLine);
         } else {
-            Writer.getInstance().writeError("Non-dimension found on line "+_lineIndex);
+            Writer.getInstance().writeError();
         }
     }
 
@@ -66,7 +66,7 @@ public class InputProcessor {
         if ( isPicture(inputLine) ) {
             sendPictureToProcessing(inputLine);
         } else {
-            Writer.getInstance().writeError("Invalid picture line at "+_lineIndex);
+            Writer.getInstance().writeError();
         }
     }
 
