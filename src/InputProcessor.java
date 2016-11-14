@@ -105,5 +105,17 @@ public class InputProcessor {
         public boolean isDimensionExposed(String inputLine) {
             return isDimension(inputLine);
         }
+
+        public void sendDimensionToProcessingExposed(String inputLine) {
+            sendDimensionToProcessing(inputLine);
+        }
+
+        public void handlePictureLinesExposed(String inputLine) {
+            handlePictureLines(inputLine);
+        }
+
+        public boolean isPictureExposed(String inputLine) {
+            return isPicture(inputLine);
+        }
     }
 }

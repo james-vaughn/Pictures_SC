@@ -216,6 +216,14 @@ public class PictureProcessor {
             return _rowCount;
         }
 
+        public int getPictureRowIndex() {
+            return _pictureRowIndex;
+        }
+
+        public void setRowCountAndColCount(int row, int col) {
+            _rowCount = row;
+            _colCount = col;
+        }
     }
 }
 

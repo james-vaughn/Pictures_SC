@@ -10,13 +10,15 @@ import static org.junit.Assert.assertTrue;
 
 public class InputProcessorTest {
 
-    InputProcessor.Exposer _inputProcessorExposer = InputProcessor.getInstance(). new Exposer();
-    PictureProcessor.Exposer _pictureProcessorExposer = PictureProcessor.getInstance(). new Exposer();
+    private InputProcessor.Exposer _inputProcessorExposer;
+    PictureProcessor.Exposer _pictureProcessorExposer;
     InputProcessor _inputProcessorInstance = InputProcessor.getInstance();
     ByteArrayOutputStream _errText = new ByteArrayOutputStream();
 
     @Before
     public void setUp() {
+        _inputProcessorExposer = InputProcessor.getInstance(). new Exposer();
+        _pictureProcessorExposer = PictureProcessor.getInstance(). new Exposer();
         System.setErr(new PrintStream(_errText));
     }
 
@@ -96,6 +98,7 @@ public class InputProcessorTest {
     @Test(expected = NullPointerException.class)
     public void Should_error_if_input_line_is_null() {
         _inputProcessorExposer.handleDimensionsExposed(null);
+        assertEquals(_errText.toString(), "");
     }
 
 
@@ -126,25 +129,87 @@ public class InputProcessorTest {
     @Test(expected = NullPointerException.class)
     public void Should_error_if_input_is_null() {
         _inputProcessorExposer.isDimensionExposed(null);
+        assertEquals(_errText.toString(), "");
     }
 
 
     //sendDimensionToProcessing tests
 
 
+    //structured basis, good data
+    @Test
+    public void Should_send_dimension_to_processing() {
+        assertEquals(_pictureProcessorExposer.getRowCount(), 0);
+        _inputProcessorExposer.sendDimensionToProcessingExposed("7");
+        assertEquals(_pictureProcessorExposer.getRowCount(), 7);
+    }
 
+    //dont need bad data testing as this method is only called after assuring good data
 
 
     //handlePictureLines tests
 
 
+    //structure basis, good data
+    //enters the 1st if branch
+    @Test
+    public void Should_send_to_processing_if_line_is_a_valid_picture_line() {
+        _pictureProcessorExposer.setRowCountAndColCount(5,5);
+        assertEquals(_pictureProcessorExposer.getPictureRowIndex(), 0);
+        _inputProcessorExposer.handlePictureLinesExposed(". . . . .");
+        assertEquals(_pictureProcessorExposer.getPictureRowIndex(), 1);
 
+        _inputProcessorExposer.handlePictureLinesExposed("A . . A .");
+        assertEquals(_pictureProcessorExposer.getPictureRowIndex(), 2);
+
+        assertEquals(_errText.toString(), "");
+    }
+
+    //Structured basis, bad data
+    //Doesnt enter the 1st branch, but instead errors
+    @Test(expected = IllegalArgumentException.class)
+    public void Should_error_if_picture_line_is_invalid() {
+        _inputProcessorExposer.handlePictureLinesExposed("");
+        assertEquals(_errText.toString(), "Error");
+    }
+
+    //Bad data
+    //This should never be a reachable state due to earlier checking, so an error is expected
+    @Test(expected = NullPointerException.class)
+    public void Should_error_if_picture_input_is_null() {
+        _inputProcessorExposer.handlePictureLinesExposed(null);
+        assertEquals(_errText.toString(), "");
+    }
 
 
     //isPicture tests
 
 
+    //structured basis, good data
+    //full coverage; covers matches
+    @Test
+    public void Should_return_true_if_line_is_a_valid_picture_row() {
+        assertTrue(_inputProcessorExposer.isPictureExposed("A . A . A"));
+        assertTrue(_inputProcessorExposer.isPictureExposed(". . . . ."));
+        assertTrue(_inputProcessorExposer.isPictureExposed("B A C F .")); //valid for final, stacked picture
+    }
 
+    //structured basis, good data
+    //full coverage; covers no matches
+    @Test
+    public void Should_return_false_if_line_is_not_a_valid_picture_row() {
+        assertFalse(_inputProcessorExposer.isPictureExposed(" . . . .")); //begins with a space
+        assertFalse(_inputProcessorExposer.isPictureExposed(". . . . ")); //ends with a space
+        assertFalse(_inputProcessorExposer.isPictureExposed(". . % .")); //contains bad character
+        assertFalse(_inputProcessorExposer.isPictureExposed(". w . .")); //contains lowercase character
+        assertFalse(_inputProcessorExposer.isPictureExposed("")); //contains nothing
+    }
+
+    //bad data; due to prior checking this should never happen, so an error is thrown
+    @Test(expected = NullPointerException.class)
+    public void Should_error_if_input_line_to_isPicture_is_null() {
+        _inputProcessorExposer.isPictureExposed(null);
+    }
 
 
     //sendPictureToProcessing tests
