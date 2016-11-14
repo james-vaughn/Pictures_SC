@@ -117,5 +117,13 @@ public class InputProcessor {
         public boolean isPictureExposed(String inputLine) {
             return isPicture(inputLine);
         }
+
+        public void sendPictureToProcessingExposed(String inputLine) {
+            sendPictureToProcessing(inputLine);
+        }
+
+        public void processEmptyLineExposed() {
+            processEmptyLine();
+        }
     }
 }

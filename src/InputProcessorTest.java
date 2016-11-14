@@ -1,3 +1,4 @@
+import jdk.nashorn.internal.objects.NativeUint8Array;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,7 +27,8 @@ public class InputProcessorTest {
     //processFileLine tests
 
 
-
+    //Structured basis, good data
+    //
 
 
     //validateLine tests
@@ -215,11 +217,34 @@ public class InputProcessorTest {
     //sendPictureToProcessing tests
 
 
+    //structured basis, good data
+    @Test
+    public void Should_send_line_to_picture_processing() {
+        _pictureProcessorExposer.setRowCountAndColCount(3,3);
+        assertEquals(_pictureProcessorExposer.getPictureRowIndex(), 0);
+        _inputProcessorExposer.sendPictureToProcessingExposed(". . .");
+        assertEquals(_pictureProcessorExposer.getPictureRowIndex(), 1);
+        _inputProcessorExposer.sendPictureToProcessingExposed(". . .");
+        assertEquals(_pictureProcessorExposer.getPictureRowIndex(), 2);
 
+    }
+
+    //bad data, should never be a reachable state due to prior checks
+    @Test(expected = NullPointerException.class)
+    public void Should_error_if_input_string_to_picture_processor_is_null() {
+        _inputProcessorExposer.sendPictureToProcessingExposed(null);
+    }
 
 
     //processEmptyLine tests
 
 
+    //structure basis, full coverage
+    @Test
+    public void Should_send_empty_line_to_processing() {
+        _pictureProcessorExposer.setShouldBeEmptyLine(true);
+        _inputProcessorExposer.processEmptyLineExposed();
+        assertFalse(_pictureProcessorExposer.getShouldBeEmptyLine());
+    }
 
 }

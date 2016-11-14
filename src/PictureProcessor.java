@@ -224,6 +224,14 @@ public class PictureProcessor {
             _rowCount = row;
             _colCount = col;
         }
+
+        public void setShouldBeEmptyLine(boolean shouldBeEmptyLine) {
+            _shouldBeEmptyLine = shouldBeEmptyLine;
+        }
+
+        public boolean getShouldBeEmptyLine() {
+            return _shouldBeEmptyLine;
+        }
     }
 }
 
