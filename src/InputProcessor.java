@@ -20,7 +20,7 @@ public class InputProcessor {
 
     public void processFileLine(String inputLine) {
         validateLine(inputLine);
-        if (isLineIndicatingGridSize() ) {
+        if (isLineIndicatingGridSize(_lineIndex) ) {
             handleDimensions(inputLine);
         } else if(inputLine.equals(LINE_SEPARATOR) ) {
             processEmptyLine();
@@ -30,6 +30,7 @@ public class InputProcessor {
         _lineIndex++;
     }
 
+    //paranoia check
     private void validateLine(String inputLine) {
         if( inputLine == null ) {
             Writer.getInstance().writeError();
@@ -37,8 +38,8 @@ public class InputProcessor {
     }
 
     //the first 2 lines are the grid dimensions
-    private boolean isLineIndicatingGridSize() {
-        return ((_lineIndex == 1) || (_lineIndex == 2) );
+    private boolean isLineIndicatingGridSize(int lineIndex) {
+        return ((lineIndex == 1) || (lineIndex == 2) );
     }
 
     private void handleDimensions(String inputLine) {
@@ -84,5 +85,25 @@ public class InputProcessor {
 
     private void processEmptyLine() {
         PictureProcessor.getInstance().processEmptyLine();
+    }
+
+
+    public class Exposer {
+
+        public void validateLineExposed(String inputLine) {
+            validateLine(inputLine);
+        }
+
+        public boolean isLineIndicatingGridSizeExposed(int lineIndex) {
+            return isLineIndicatingGridSize(lineIndex);
+        }
+
+        public void handleDimensionsExposed(String inputLine) {
+            handleDimensions(inputLine);
+        }
+
+        public boolean isDimensionExposed(String inputLine) {
+            return isDimension(inputLine);
+        }
     }
 }

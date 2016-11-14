@@ -7,28 +7,18 @@ import java.util.stream.Collectors;
 //reader handles reading in from stdin
 public class Reader {
 
-    //singleton
-    private static final Reader READER_INSTANCE = new Reader();
     private final static String INPUT_FILE_PATH = "src/hw10in.txt";
-
-    private Reader() {
-
-    }
-
-    public static Reader getInstance() {
-        return READER_INSTANCE;
-    }
 
     //main for whole program
     public static void main(String[] args) {
         try {
-            Reader.getInstance().processInputFile(INPUT_FILE_PATH);
+            processInputFile(INPUT_FILE_PATH);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void processInputFile(String filePath) throws IOException {
+    private static void processInputFile(String filePath) throws IOException {
         BufferedReader fileReader = new BufferedReader(new FileReader(filePath));
 
         List<String> listOfLines = fileReader.lines().collect(Collectors.toList());

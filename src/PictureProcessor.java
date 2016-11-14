@@ -200,12 +200,22 @@ public class PictureProcessor {
         return pictureMatrix;
     }
 
+
     private class TemporaryPicture {
         private ArrayList<String> TEMP_PIC_LINES;
 
         private TemporaryPicture() {
             TEMP_PIC_LINES = new ArrayList<>();
         }
+    }
+
+
+    public class Exposer {
+
+        public int getRowCount() {
+            return _rowCount;
+        }
+
     }
 }
 
