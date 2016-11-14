@@ -9,8 +9,7 @@ public class PictureProcessor {
     private int _rowCount = 0;
     private int _colCount = 0;
 
-    private static final PictureProcessor PICTURE_PROCESSOR_INSTANCE =
-            new PictureProcessor();
+    private static final PictureProcessor PICTURE_PROCESSOR_INSTANCE = new PictureProcessor();
 
     // Stores the index of the row that is currently being processed
     // Row 1 of the picture has index of 0
@@ -177,7 +176,7 @@ public class PictureProcessor {
 
     //returns all unique letters in a picture
     private HashSet<Character> uniqueLetters(char[][] pictureMatrix) {
-        HashSet<Character> setOfLetters = new HashSet<Character>();
+        HashSet<Character> setOfLetters = new HashSet<>();
         for (int i = 0; i < pictureMatrix.length; i++) {
             for (int k = 0; k < pictureMatrix[i].length; k++) {
                 char currentLetter = pictureMatrix[i][k];
@@ -214,6 +213,14 @@ public class PictureProcessor {
 
         public int getRowCount() {
             return _rowCount;
+        }
+
+        public int getColCount() {
+            return _colCount;
+        }
+
+        public void setPictureRowIndex(int pictureRowIndex) {
+            _pictureRowIndex = pictureRowIndex;
         }
 
         public int getPictureRowIndex() {

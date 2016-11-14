@@ -53,7 +53,7 @@ public class PictureSolverTest {
     @Test
     public void Should_yield_correct_answer_to_problem() throws FileNotFoundException {
         PictureSolver.getInstance().solve(_pictures, _finalPicture);
-        Scanner fileReader = new Scanner(new File("hw10out.txt")); //make reader
+        Scanner fileReader = new Scanner(new File("src/hw10out.txt")); //make reader
         assertEquals("BCA", fileReader.nextLine());
     }
 
