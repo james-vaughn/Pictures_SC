@@ -1,4 +1,3 @@
-import jdk.nashorn.internal.objects.NativeUint8Array;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,9 +11,9 @@ import static org.junit.Assert.assertTrue;
 public class InputProcessorTest {
 
     private InputProcessor.Exposer _inputProcessorExposer;
-    PictureProcessor.Exposer _pictureProcessorExposer;
-    InputProcessor _inputProcessorInstance = InputProcessor.getInstance();
-    ByteArrayOutputStream _errText = new ByteArrayOutputStream();
+    private PictureProcessor.Exposer _pictureProcessorExposer;
+    private InputProcessor _inputProcessorInstance = InputProcessor.getInstance();
+    private ByteArrayOutputStream _errText = new ByteArrayOutputStream();
 
     @Before
     public void setUp() {
@@ -28,7 +27,48 @@ public class InputProcessorTest {
 
 
     //Structured basis, good data
-    //
+    //enters the 1st branch
+    @Test
+    public void Should_handle_dimension_lines_through_process_file_lines() {
+        _inputProcessorInstance._lineIndex = 1;
+        _pictureProcessorExposer.setRowCountAndColCount(0,0);
+
+        _inputProcessorInstance.processFileLine("6");
+        assertEquals(_pictureProcessorExposer.getRowCount(), 6);
+
+        _inputProcessorInstance.processFileLine("9");
+        assertEquals(_pictureProcessorExposer.getColCount(), 9);
+    }
+
+    //structured basis, good data
+    //enters the else if (2nd branch)
+    @Test
+    public void Should_handle_empty_lines_through_process_file_lines() {
+        _inputProcessorInstance._lineIndex = 3;
+        _pictureProcessorExposer.setShouldBeEmptyLine(true);
+
+        _inputProcessorInstance.processFileLine("");
+        assertFalse(_pictureProcessorExposer.getShouldBeEmptyLine());
+        assertEquals(_inputProcessorInstance._lineIndex, 4);
+
+    }
+
+    //structured basis, good data
+    //enters the else (last branch)
+    @Test
+    public void Should_handle_picture_lines_through_process_file_lines() {
+        _inputProcessorInstance._lineIndex = 5;
+
+        _pictureProcessorExposer.setRowCountAndColCount(4,4);
+        _pictureProcessorExposer.setPictureRowIndex(0);
+        _pictureProcessorExposer.setShouldBeEmptyLine(false);
+
+        _inputProcessorInstance.processFileLine(". . . .");
+        assertEquals(_pictureProcessorExposer.getPictureRowIndex(), 1);
+        assertEquals(_inputProcessorInstance._lineIndex, 6);
+    }
+
+    //bad data tests are handled in other functions, so those tests are with the validate methods
 
 
     //validateLine tests
@@ -81,7 +121,11 @@ public class InputProcessorTest {
     //enters 1st branch
     @Test
     public void Should_send_dimension_to_processing_if_the_dimension_is_valid() {
+        _inputProcessorInstance._lineIndex = 1;
+        _pictureProcessorExposer.setRowCountAndColCount(0,0);
+
         assertEquals(_pictureProcessorExposer.getRowCount(), 0);
+
         _inputProcessorExposer.handleDimensionsExposed("5");
         assertEquals(_pictureProcessorExposer.getRowCount(), 5);
         assertEquals(_errText.toString(), "");
@@ -157,6 +201,8 @@ public class InputProcessorTest {
     @Test
     public void Should_send_to_processing_if_line_is_a_valid_picture_line() {
         _pictureProcessorExposer.setRowCountAndColCount(5,5);
+        _pictureProcessorExposer.setPictureRowIndex(0);
+
         assertEquals(_pictureProcessorExposer.getPictureRowIndex(), 0);
         _inputProcessorExposer.handlePictureLinesExposed(". . . . .");
         assertEquals(_pictureProcessorExposer.getPictureRowIndex(), 1);
@@ -221,6 +267,8 @@ public class InputProcessorTest {
     @Test
     public void Should_send_line_to_picture_processing() {
         _pictureProcessorExposer.setRowCountAndColCount(3,3);
+        _pictureProcessorExposer.setPictureRowIndex(0);
+
         assertEquals(_pictureProcessorExposer.getPictureRowIndex(), 0);
         _inputProcessorExposer.sendPictureToProcessingExposed(". . .");
         assertEquals(_pictureProcessorExposer.getPictureRowIndex(), 1);
@@ -248,3 +296,4 @@ public class InputProcessorTest {
     }
 
 }
+

@@ -125,5 +125,9 @@ public class InputProcessor {
         public void processEmptyLineExposed() {
             processEmptyLine();
         }
+
+        public void setLineIndex(int lineIndex) {
+            _lineIndex = lineIndex;
+        }
     }
 }

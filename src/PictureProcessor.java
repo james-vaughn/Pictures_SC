@@ -216,6 +216,10 @@ public class PictureProcessor {
             return _rowCount;
         }
 
+        public int getColCount() {
+            return _colCount;
+        }
+
         public int getPictureRowIndex() {
             return _pictureRowIndex;
         }
@@ -225,12 +229,24 @@ public class PictureProcessor {
             _colCount = col;
         }
 
+        public boolean getShouldBeEmptyLine() {
+            return _shouldBeEmptyLine;
+        }
+
         public void setShouldBeEmptyLine(boolean shouldBeEmptyLine) {
             _shouldBeEmptyLine = shouldBeEmptyLine;
         }
 
-        public boolean getShouldBeEmptyLine() {
-            return _shouldBeEmptyLine;
+        public void setLetters(HashSet<Character> letters) {
+            _letters = letters;
+        }
+
+        public void setPictureRowIndex(int pictureRowIndex) {
+            _pictureRowIndex = pictureRowIndex;
+        }
+
+        public void setIsLastLine(boolean isLastLine) {
+            _isLastLine = isLastLine;
         }
     }
 }
