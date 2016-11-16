@@ -11,9 +11,9 @@ import static org.junit.Assert.assertTrue;
 public class InputProcessorTest {
 
     private InputProcessor.Exposer _inputProcessorExposer;
-    PictureProcessor.Exposer _pictureProcessorExposer;
-    InputProcessor _inputProcessorInstance = InputProcessor.getInstance();
-    ByteArrayOutputStream _errText = new ByteArrayOutputStream();
+    private PictureProcessor.Exposer _pictureProcessorExposer;
+    private InputProcessor _inputProcessorInstance = InputProcessor.getInstance();
+    private ByteArrayOutputStream _errText = new ByteArrayOutputStream();
 
     @Before
     public void setUp() {
@@ -296,3 +296,4 @@ public class InputProcessorTest {
     }
 
 }
+
