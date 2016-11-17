@@ -1,0 +1,9 @@
+Error checking is done by InputProcessor and PictureProcessor. These classes serve as barricades to the rest of the program.
+They analyze the input to make sure the rest of the program cannot enter a bad state.
+
+From the processors, they call Writer's writeError method upon error. This method will log the erroneous input and throw a RuntimeException.
+ We throw an IllegalArgumentException as this method is only called when the input cannot be interpreted. Further,
+ we throw an exception to kill the program as we cannot redeem the outcome (we want to be accurate). A runtime exception is used
+ so we do not have to bubble up the exception to the processors.
+
+ I would have logged a more descriptive error, but we are only supposed to output "Error."

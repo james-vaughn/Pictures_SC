@@ -135,6 +135,8 @@ public class PictureProcessor {
         if (newPictureLetter != '|') {
             return new Picture(newPictureLetter, pictureMatrix);
         }
+
+        WRITER_INSTANCE.writeError();
         return null;
     }
 

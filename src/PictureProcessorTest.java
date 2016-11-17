@@ -26,14 +26,45 @@ public class PictureProcessorTest {
     }
 
 
+    //processDimensionLine
+
+
+    //Structure basis
+    //1st branch entered
+    @Test
+    public void Should_set_row_count_for_first_line_number() {
+        _pictureProcessorExposer.setRowCountAndColCount(10,1);
+        assertEquals(10, _pictureProcessorExposer.getRowCount() );
+
+        _inputProcessorExposer.setLineIndex(1);
+        _pictureProcessor.processDimensionLine("20");
+        assertEquals(20, _pictureProcessorExposer.getRowCount() );
+    }
+
+    //Structured Basis
+    //1st branch passed
+    @Test
+    public void Should_set_col_count_for_second_line_number() {
+        _pictureProcessorExposer.setRowCountAndColCount(1,10);
+        assertEquals(10, _pictureProcessorExposer.getColCount() );
+
+        _inputProcessorExposer.setLineIndex(2);
+        _pictureProcessor.processDimensionLine("20");
+        assertEquals(20, _pictureProcessorExposer.getColCount() );
+    }
+
+    //bad data is blocked by the barricade
+
+
     //processPictureLine
 
 
     // Structured Basis
     // takes 1st branch
     @Test (expected=IllegalArgumentException.class)
-    public void testProcessPictureLine_() {
+    public void Should_error_if_process_picture_line_should_be_processing_an_empty_line() {
         _pictureProcessorExposer.setShouldBeEmptyLine(true);
+
         _pictureProcessor.processPictureLine("A A . A A .");
         assertEquals("Error", _errText.toString() );
     }
@@ -42,7 +73,7 @@ public class PictureProcessorTest {
     // Skips 1st branch
     // Enters 2nd and 3rd branch
     @Test
-    public void testProcessPictureLine() {
+    public void Should_process_the_last_line_of_a_picture() {
         _pictureProcessorExposer.setRowCountAndColCount(1,6);
         _pictureProcessorExposer.setPictureRowIndex(0);
 
@@ -57,31 +88,13 @@ public class PictureProcessorTest {
         assertTrue(_pictureProcessorExposer.getShouldBeEmptyLine() );
     }
 
-    // Structured Basis 3: First if is false, second if is true,
-    //  third if is false
+    //I will not test the 3rd if is false as it runs through the rest of the program, casusing issues
+    //Also, the processLastLine tests exist elsewhere
+
+    // Structured Basis
+    // All branches skipped
     @Test
-    public void testProcessPictureLineSB3() {
-        _pictureProcessorExposer.setRowCountAndColCount(1,6);
-        _pictureProcessorExposer.setPictureRowIndex(0);
-        // validatePictureList requires at least one picture in PICTURE_LIST
-        _pictureProcessorExposer.setPictures(new ArrayList<>(Arrays.asList(
-                new Picture('A', new char[1][1]) ) ) );
-
-        _pictureProcessorExposer.setLetters(new HashSet<>(
-                Arrays.asList('A') ) );
-
-        _pictureProcessorExposer.setCurrPicture(
-                _pictureProcessorExposer.createNewTempPicture(new ArrayList<>() ) );
-
-        _pictureProcessorExposer.setIsLastLine(true);
-        _pictureProcessorExposer.setShouldBeEmptyLine(false);
-
-        _pictureProcessor.processPictureLine("A A . A A .");
-    }
-
-    // Structured Basis 4: First if is false, second if is false
-    @Test
-    public void testProcessPictureLineSB4() {
+    public void Should_process_a_standard_picture_line() {
         _pictureProcessorExposer.setRowCountAndColCount(5,6);
         _pictureProcessorExposer.setPictureRowIndex(0);
         assertEquals(0, _pictureProcessorExposer.getPictureRowIndex() );
@@ -97,48 +110,11 @@ public class PictureProcessorTest {
     }
 
 
-    // Structured Basis 1: First if is true, so processDimensionLine sets the
-    //  number of rows
-    @Test
-    public void testProcessDimensionLineSB1() {
-        _pictureProcessorExposer.setRowCountAndColCount(10,1);
-        assertEquals(10, _pictureProcessorExposer.getRowCount() );
+    //validatePictureWidth
 
-        _inputProcessorExposer.setLineIndex(1);
-        _pictureProcessor.processDimensionLine("20");
-        assertEquals(20, _pictureProcessorExposer.getRowCount() );
-    }
 
-    // Structured Basis 2: First if is false, so processDimensionLine sets the
-    //  number of columns
-    @Test
-    public void testProcessDimensionLineSB2() {
-        _pictureProcessorExposer.setRowCountAndColCount(1,10);
-        assertEquals(10, _pictureProcessorExposer.getColCount() );
-
-        _inputProcessorExposer.setLineIndex(2);
-        _pictureProcessor.processDimensionLine("20");
-        assertEquals(20, _pictureProcessorExposer.getColCount() );
-    }
-
-    // Structured Basis 1: If is true
-    @Test (expected=IllegalArgumentException.class)
-    public void testProcessEmptyLineSB1() {
-        _pictureProcessorExposer.setShouldBeEmptyLine(false);
-        _pictureProcessorExposer.processEmptyLineExposed();
-
-        assertEquals("Error", _errText.toString() );
-    }
-
-    // Structured Basis 2: If is false
-    @Test
-    public void testProcessEmptyLineSB2() {
-        _pictureProcessorExposer.setShouldBeEmptyLine(true);
-        _pictureProcessorExposer.processEmptyLineExposed();
-        assertFalse(_pictureProcessorExposer.getShouldBeEmptyLine());
-    }
-
-    // Structured Basis 1: Picture width is equal to the number of columns
+    //Structured Basis
+    //1st branch passed
     @Test
     public void testValidatePictureWidthNominal() {
         _pictureProcessorExposer.setRowCountAndColCount(1,10);
@@ -155,6 +131,7 @@ public class PictureProcessorTest {
         _pictureProcessorExposer.validatePictureWidthExposed("abcdefghij");
         assertEquals("Error", _errText.toString());
     }
+
 
     // Structured Basis 1: Picture height is less than the number of rows
     // Boundary 1: Picture height is less than the number of rows
@@ -188,6 +165,33 @@ public class PictureProcessorTest {
         _pictureProcessorExposer.validatePictureHeightExposed();
         assertEquals("Error", _errText.toString() );
     }
+
+
+    //processEmptyLine
+
+
+    //Structured Basis
+    //1st branch entered
+    @Test (expected=IllegalArgumentException.class)
+    public void Should_error_if_non_empty_line_is_processed() {
+        _pictureProcessorExposer.setShouldBeEmptyLine(false);
+        _pictureProcessorExposer.processEmptyLineExposed();
+
+        assertEquals("Error", _errText.toString() );
+    }
+
+    //Structured Basis
+    //1st branch passed
+    @Test
+    public void Should_set_should_be_empty_line_back_to_false() {
+        _pictureProcessorExposer.setShouldBeEmptyLine(true);
+
+        _pictureProcessorExposer.processEmptyLineExposed();
+        assertFalse(_pictureProcessorExposer.getShouldBeEmptyLine());
+    }
+
+
+
 
     // Structured Basis 1: Empty line not expected
     @Test (expected=IllegalArgumentException.class)
@@ -396,7 +400,6 @@ public class PictureProcessorTest {
     }
 
     // Structured Basis 2: If is false
-    // I don't know how the return '|' would occur
     @Test (expected=IllegalArgumentException.class)
     public void testImageLetterForStackedPictureSB2() {
         _pictureProcessorExposer.setLetters(new HashSet<>(
