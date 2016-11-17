@@ -2,8 +2,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -15,6 +17,7 @@ public class PictureSolverTest {
     Picture _finalPicture;
     PictureSolver.Exposer _exposer = PictureSolver.getInstance(). new Exposer();
     HashMap<Character, Set<Character>> _overlayMap = new HashMap<>();
+    ByteArrayOutputStream _outText = new ByteArrayOutputStream();
 
     @Before
     public void setUp() {
@@ -42,6 +45,8 @@ public class PictureSolverTest {
         _overlayMap.put('A', new HashSet<>());
         _overlayMap.put('B', new HashSet<>(Arrays.asList('A','C')));
         _overlayMap.put('C', new HashSet<>(Arrays.asList('A')));
+
+        System.setOut(new PrintStream(_outText));
     }
 
 
@@ -53,8 +58,7 @@ public class PictureSolverTest {
     @Test
     public void Should_yield_correct_answer_to_problem() throws FileNotFoundException {
         PictureSolver.getInstance().solve(_pictures, _finalPicture);
-        Scanner fileReader = new Scanner(new File("src/hw10out.txt")); //make reader
-        assertEquals("BCA", fileReader.nextLine());
+        assertEquals("BCA", _outText.toString());
     }
 
     //bad data not possible because of barricades

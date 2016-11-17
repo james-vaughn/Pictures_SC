@@ -61,7 +61,7 @@ public class PictureProcessor {
             WRITER_INSTANCE.writeError();
         }
 
-        String pictureLine = inputLine.replaceAll("\\s+","");
+        String pictureLine = inputLine.replaceAll("\\s+",""); //remove spaces
         validatePictureWidth(pictureLine);
         validatePictureHeight();
         _currPicture.TEMP_PIC_LINES.add(_pictureRowIndex, pictureLine);
@@ -130,31 +130,30 @@ public class PictureProcessor {
 
     private Picture processedTemporaryPicture() {
         char[][] pictureMatrix = processTemporaryMatrix();
-        char newPictureLetter = imageLetter(pictureMatrix);
-        // Vertical bar represents imageLetter method failed
+        char newPictureLetter = pictureLetter(pictureMatrix);
+        // Vertical bar represents pictureLetter method failed
         if (newPictureLetter != '|') {
             return new Picture(newPictureLetter, pictureMatrix);
         }
         return null;
     }
 
-    private char imageLetter(char[][] pictureMatrix) {
+    private char pictureLetter(char[][] pictureMatrix) {
         HashSet<Character> setOfUniqueLetters = uniqueLetters(pictureMatrix);
         // If this is the not last line, then this matrix is for
-        //  a non-stacked picture
+        //  a non-final picture
         if (!_isLastLine) {
-            return imageLetterForNonFinalPicture(setOfUniqueLetters);
+            return pictureLetterForNonFinalPicture(setOfUniqueLetters);
         } else {
-            return imageLetterForFinalPicture(setOfUniqueLetters);
+            return pictureLetterForFinalPicture(setOfUniqueLetters);
         }
     }
 
-    private char imageLetterForNonFinalPicture(HashSet<Character> setOfUniqueLetters) {
+    private char pictureLetterForNonFinalPicture(HashSet<Character> setOfUniqueLetters) {
 
         if (setOfUniqueLetters.size() == 1) {
             char pictureLetter = setOfUniqueLetters.iterator().next();
-            _letters.add(pictureLetter);
-            return pictureLetter;
+            return uniqueLetter(pictureLetter);
         } else {
             WRITER_INSTANCE.writeError();
         }
@@ -162,7 +161,7 @@ public class PictureProcessor {
         return '|';
     }
 
-    private char imageLetterForFinalPicture(HashSet<Character> setOfUniqueLetters) {
+    private char pictureLetterForFinalPicture(HashSet<Character> setOfUniqueLetters) {
 
         if (setOfUniqueLetters.equals(_letters) ) {
             // Hyphen represents that this picture is a stacked picture
@@ -186,6 +185,14 @@ public class PictureProcessor {
             }
         }
         return setOfLetters;
+    }
+
+    private char uniqueLetter(char pictureLetter) {
+        // If letters already contains this letter
+        if (!_letters.add(pictureLetter) ) {
+            WRITER_INSTANCE.writeError();
+        }
+        return pictureLetter;
     }
 
     private char[][] processTemporaryMatrix() {
@@ -246,6 +253,87 @@ public class PictureProcessor {
 
         public void setIsLastLine(boolean isLastLine) {
             _isLastLine = isLastLine;
+        }
+
+        public void setCurrPicture(TemporaryPicture currPicture) {
+            _currPicture = currPicture;
+        }
+
+        public TemporaryPicture createNewTempPicture(ArrayList<String> pictureLines) {
+            TemporaryPicture tempPic = new TemporaryPicture();
+            tempPic.TEMP_PIC_LINES = pictureLines;
+
+            return tempPic;
+        }
+
+        public ArrayList<Picture> getPictures() {
+            return _pictures;
+        }
+
+        public void setPictures(ArrayList<Picture> pictureList) {
+            _pictures = pictureList;
+        }
+
+        public Picture _getFinalPicture() {
+            return _finalPicture;
+        }
+
+        public void setFinalPicture(Picture picture) {
+            _finalPicture = picture;
+        }
+
+        public void validatePictureWidthExposed(String pictureLine) {
+            validatePictureWidth(pictureLine);
+        }
+
+        public void validatePictureHeightExposed() {
+            validatePictureHeight();
+        }
+
+        public void processEmptyLineExposed() {
+            processEmptyLine();
+        }
+
+        public void processLastLineExposed() {
+            processLastLine();
+        }
+
+        public void validatePictureListExposed() {
+            validatePictureList();
+        }
+
+        public void createNewPictureExposed() {
+            createNewPicture();
+        }
+
+        public Picture processTemporaryPictureExposed() {
+            return processedTemporaryPicture();
+        }
+
+        public char pictureLetterExposed(char[][] pictureMatrix) {
+            return pictureLetter(pictureMatrix);
+        }
+
+        public char pictureLetterForNonFinalPictureExposed(
+                HashSet<Character> setOfUniqueLetters) {
+            return pictureLetterForNonFinalPicture(setOfUniqueLetters);
+        }
+
+        public char uniqueLetterExposed(char pictureLetter) {
+            return uniqueLetter(pictureLetter);
+        }
+
+        public char pictureLetterForFinalPictureExposed(
+                HashSet<Character> setOfUniqueLetters) {
+            return pictureLetterForFinalPicture(setOfUniqueLetters);
+        }
+
+        public HashSet<Character> uniqueLettersExposed(char[][] pictureMatrix) {
+            return uniqueLetters(pictureMatrix);
+        }
+
+        public char[][] processTemporaryMatrixExposed() {
+            return processTemporaryMatrix();
         }
     }
 }
