@@ -168,6 +168,7 @@ public class PictureProcessor {
 
     private char pictureLetterForFinalPicture(HashSet<Character> setOfUniqueLetters) {
 
+        // make sure that all and only the letters used w/in the other pictures are present in the final image
         if (setOfUniqueLetters.equals(_letters) ) {
             // Hyphen represents that this picture is a stacked picture
             return '-';

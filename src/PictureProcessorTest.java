@@ -337,7 +337,7 @@ public class PictureProcessorTest {
     //structured Basis
     //1st branch passed
     @Test
-    public void Should_return_picture_letter_forthe_final_stacked_picture_if_we_are_at_the_last_line() {
+    public void Should_return_picture_letter_for_the_final_stacked_picture_if_we_are_at_the_last_line() {
         _pictureProcessorExposer.setIsLastLine(true);
         char[][] testPictureMatrix = {{'A'}};
         _pictureProcessorExposer.setLetters(new HashSet<>(
@@ -368,44 +368,25 @@ public class PictureProcessorTest {
     }
 
 
-    //uniqueLetter
+    //pictureLetterForFinalPicture
 
 
-    // Structured Basis 1: If is true (add method returns false if the
-    //  element already exists in the set, true otherwise)
+    //Structured basis
+    //if branch entered
     @Test
-    public void testUniqueLetterSB1() {
-        _pictureProcessorExposer.setLetters(new HashSet<>(
-                Arrays.asList('A') ) );
-
-        assertEquals('B', _pictureProcessorExposer.uniqueLetterExposed('B') );
-    }
-
-    // Structured Basis 2: If is false
-    @Test (expected=IllegalArgumentException.class)
-    public void testUniqueLetterSB2() {
-        _pictureProcessorExposer.setLetters(new HashSet<>(
-                Arrays.asList('A') ) );
-        _pictureProcessorExposer.uniqueLetterExposed('A');
-
-        assertEquals("Error", _errText.toString());
-    }
-
-    // Structured Basis 1: If is true
-    @Test
-    public void testImageLetterForStackedPictureSB1() {
+    public void Should_return_the_character_used_for_final_images_if_the_set_of_unique_letters_matches_the_input_set() {
         _pictureProcessorExposer.setLetters(new HashSet<>(
                 Arrays.asList('A', 'B', 'C') ) );
         HashSet<Character> testSet = new HashSet<>(
                 Arrays.asList('A', 'B', 'C') );
 
-        assertEquals('-', _pictureProcessorExposer.pictureLetterForFinalPictureExposed(
-                testSet) );
+        assertEquals('-', _pictureProcessorExposer.pictureLetterForFinalPictureExposed(testSet));
     }
 
-    // Structured Basis 2: If is false
+    //Structured basis
+    //if missed
     @Test (expected=IllegalArgumentException.class)
-    public void testImageLetterForStackedPictureSB2() {
+    public void Should_error_if_letters_set_differs_from_the_input_set() {
         _pictureProcessorExposer.setLetters(new HashSet<>(
                 Arrays.asList('A', 'B', 'C') ) );
         HashSet<Character> testSet = new HashSet<>(
@@ -415,10 +396,14 @@ public class PictureProcessorTest {
         assertEquals("Error", _errText.toString() );
     }
 
-    // Structured Basis 1: Normal matrix, one letter
-    // Good Data
+
+    //uniqueLetters
+
+
+    //structured basis
+    //full coverage with 1 letter
     @Test
-    public void testUniqueLetterSetSB1() {
+    public void Should_return_set_with_just_one_letter() {
         char[][] testPictureMatrix =
                        {{'A', 'A', '.'},
                         {'A', '.', 'A'},
@@ -428,10 +413,10 @@ public class PictureProcessorTest {
                 _pictureProcessorExposer.uniqueLettersExposed(testPictureMatrix) );
     }
 
-    // Structured Basis 2: Normal matrix, multiple letters
-    // Good Data
+    //structured basis
+    //full coverage with multiple letters
     @Test
-    public void testUniqueLetterSetSB2() {
+    public void Should_return_set_with_all_used_letters() {
         char[][] testPictureMatrix =
                         {{'A', 'B', '.'},
                         {'A', '.', 'C'},
@@ -441,10 +426,10 @@ public class PictureProcessorTest {
                 _pictureProcessorExposer.uniqueLettersExposed(testPictureMatrix) );
     }
 
-    // Structured Basis 3: All dots
-    // Good Data
+    // Structured Basis
+    // Only enter the for loops. Do not enter the if branch
     @Test
-    public void testUniqueLetterSetSB3() {
+    public void Should_return_empty_set_for_all_dot_matrix() {
         char[][] testPictureMatrix =
                        {{'.', '.', '.'},
                         {'.', '.', '.'},
@@ -454,10 +439,10 @@ public class PictureProcessorTest {
                 _pictureProcessorExposer.uniqueLettersExposed(testPictureMatrix) );
     }
 
-    // Structured Basis 4: All Letters
-    // Good Data
+    // Structured Basis
+    // Never don't take the if branch
     @Test
-    public void testUniqueLetterSetSB4() {
+    public void Should_return_proper_set_even_without_dots() {
         char[][] testPictureMatrix =
                        {{'A', 'A', 'A'},
                         {'A', 'A', 'A'},
@@ -467,25 +452,53 @@ public class PictureProcessorTest {
                 _pictureProcessorExposer.uniqueLettersExposed(testPictureMatrix) );
     }
 
-    // Structured Basis 5: Empty matrix
-    // Good Data
+    // Structured Basis
+    // Do not enter the for loops
     @Test
-    public void testUniqueLetterSetSB5() {
+    public void Should_return_empty_set_given_empty_input() {
         char[][] testPictureMatrix = {{}};
         assertEquals(new HashSet<Character>(),
                 _pictureProcessorExposer.uniqueLettersExposed(testPictureMatrix) );
     }
 
-    // Bad Data: 1 null matrix
+    // Bad Data
     @Test (expected=NullPointerException.class)
-    public void testUniqueLetterSetBD1() {
-        char[][] testPictureMatrix = null;
-        _pictureProcessorExposer.uniqueLettersExposed(testPictureMatrix);
+    public void Should_error_given_null_data() {
+        _pictureProcessorExposer.uniqueLettersExposed(null);
     }
 
-    // Structured Basis 1: Temporary picture has one line, one column
+
+    //uniqueLetter
+
+
+    //structured basis
+    //1st branch missed
     @Test
-    public void testProcessTemporaryMatrixSB1() {
+    public void Should_return_picture_letter_if_the_letter_has_not_been_used_earlier() {
+        _pictureProcessorExposer.setLetters(new HashSet<>(Arrays.asList('A')));
+
+        assertEquals('B', _pictureProcessorExposer.uniqueLetterExposed('B'));
+    }
+
+    //structured basis
+    //1st branch entered
+    @Test (expected=IllegalArgumentException.class)
+    public void Should_error_if_the_letter_was_used_earlier() {
+        _pictureProcessorExposer.setLetters(new HashSet<>(
+                Arrays.asList('A') ) );
+        _pictureProcessorExposer.uniqueLetterExposed('A');
+
+        assertEquals("Error", _errText.toString());
+    }
+
+
+    //processTemporaryMatrix
+
+
+    //structured basis
+    //full coverage
+    @Test
+    public void Should_extract_the_picture_matrix_given_standard_input() {
         _pictureProcessorExposer.setRowCountAndColCount(1,1);
 
         _pictureProcessorExposer.setCurrPicture(
@@ -498,9 +511,10 @@ public class PictureProcessorTest {
                 _pictureProcessorExposer.processTemporaryMatrixExposed());
     }
 
-    // Structured Basis 2: Temporary picture has multiple lines and columns
+    // Structured Basis
+    // Temporary matrix with multiple rows/cols
     @Test
-    public void testProcessTemporaryMatrixSB2() {
+    public void Should_extract_picture_from_multi_row_and_col_inputs() {
         _pictureProcessorExposer.setRowCountAndColCount(3,3);
 
         _pictureProcessorExposer.setCurrPicture(
@@ -519,9 +533,10 @@ public class PictureProcessorTest {
                 _pictureProcessorExposer.processTemporaryMatrixExposed());
     }
 
-    // Structured Basis 3: Temporary picture has multiple lines, one column
+    // Structured Basis
+    // multi rows, single col
     @Test
-    public void testProcessTemporaryMatrixSB3() {
+    public void Should_extract_picture_from_multi_row_but_single_col_input() {
         _pictureProcessorExposer.setRowCountAndColCount(3,1);
 
         _pictureProcessorExposer.setCurrPicture(
