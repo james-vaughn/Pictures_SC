@@ -141,7 +141,10 @@ public class PictureProcessor {
     }
 
     private char pictureLetter(char[][] pictureMatrix) {
+
+        //unique letters in the individual picture
         HashSet<Character> setOfUniqueLetters = uniqueLetters(pictureMatrix);
+
         // If this is the not last line, then this matrix is for
         //  a non-final picture
         if (!_isLastLine) {

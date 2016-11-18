@@ -116,16 +116,17 @@ public class PictureProcessorTest {
     //Structured Basis
     //1st branch passed
     @Test
-    public void testValidatePictureWidthNominal() {
+    public void Should_not_error_if_picture_width_is_correct() {
         _pictureProcessorExposer.setRowCountAndColCount(1,10);
 
         _pictureProcessorExposer.validatePictureWidthExposed("abcdefghij");
         assertEquals("", _errText.toString() );
     }
 
-    // Structured Basis 2: Picture width is not equal to the number of columns
+    //structure basis
+    //1st branch enter
     @Test (expected=IllegalArgumentException.class)
-    public void testValidatePictureWidthUnequal() {
+    public void Should_error_if_picture_width_is_wrong() {
         _pictureProcessorExposer.setRowCountAndColCount(1,11);
 
         _pictureProcessorExposer.validatePictureWidthExposed("abcdefghij");
@@ -133,10 +134,14 @@ public class PictureProcessorTest {
     }
 
 
-    // Structured Basis 1: Picture height is less than the number of rows
-    // Boundary 1: Picture height is less than the number of rows
+    //validatePictureHeight
+
+
+    //boundary test, structured basis
+    //picture height < row count
+    //skip branch
     @Test
-    public void testValidatePictureHeightBound1() {
+    public void Should_be_valid_if_picture_height_is_smaller_than_num_rows() {
         _pictureProcessorExposer.setPictureRowIndex(8);
         _pictureProcessorExposer.setRowCountAndColCount(10,1);
 
@@ -144,10 +149,10 @@ public class PictureProcessorTest {
         assertEquals("", _errText.toString() );
     }
 
-    // Structured Basis 1: Picture height equals the number of rows
-    // Boundary 2: Picture height equals the number of rows
+    //boundary test
+    //height == row count
     @Test
-    public void testValidatePictureHeightBound2() {
+    public void Should_be_valid_if_picture_height_is_equal_to_num_rows() {
         _pictureProcessorExposer.setPictureRowIndex(10);
         _pictureProcessorExposer.setRowCountAndColCount(10,1);
 
@@ -155,10 +160,11 @@ public class PictureProcessorTest {
         assertEquals("", _errText.toString() );
     }
 
-    // Structured Basis 2: Picture height is greater than the number of rows
-    // Boundary 3: Picture height is greater than the number of rows
+    //boundary test, structured basis
+    //picture height > row count
+    //enter branch
     @Test (expected=IllegalArgumentException.class)
-    public void testValidatePictureHeightBound3() {
+    public void Should_not_be_valid_if_picture_over_row_count() {
         _pictureProcessorExposer.setPictureRowIndex(12);
         _pictureProcessorExposer.setRowCountAndColCount(10,1);
 
@@ -191,41 +197,25 @@ public class PictureProcessorTest {
     }
 
 
+    //validatePictureList
 
 
-    // Structured Basis 1: Empty line not expected
+    //structured basis, boundary
+    //1st branch entered
+    //pictures size < 1
     @Test (expected=IllegalArgumentException.class)
-    public void testProcessEmptyLineNotExpected() {
-        _pictureProcessorExposer.setShouldBeEmptyLine(false);
-
-        _pictureProcessorExposer.processEmptyLineExposed();
-        assertEquals("Error", _errText.toString());
-    }
-
-    // Structured Basis 2: Empty line expected
-    @Test
-    public void testProcessEmptyLineExpected() {
-        _pictureProcessorExposer.setShouldBeEmptyLine(true);
-
-        _pictureProcessorExposer.processEmptyLineExposed();
-        assertEquals(false, _pictureProcessorExposer.getShouldBeEmptyLine());
-    }
-
-
-    // Structured Basis 1: Picture list size less than 1, first if is true
-    // Boundary 1: Picture list size less than 1
-    @Test (expected=IllegalArgumentException.class)
-    public void testValidatePictureListBound1() {
+    public void Should_error_if_pictures_does_not_contain_at_least_one_picture() {
         _pictureProcessorExposer.setPictures(new ArrayList<>());
 
         _pictureProcessorExposer.validatePictureListExposed();
         assertEquals("Error", _errText.toString() );
     }
 
-    // Structured Basis 2: First if is false, else if is true
-    // Boundary 2: Picture list size is equal to 1, stacked picture is null
+    //structured basis, boundary
+    //1st branch missed (pictures size == 1)
+    //2nd branch entered
     @Test (expected=IllegalArgumentException.class)
-    public void testValidatePictureListBound2() {
+    public void Should_error_if_picture_list_size_is_at_least_1_but_final_picture_is_missing() {
         ArrayList<Picture> pictureList = new ArrayList<>(Arrays.asList(
                 new Picture('A', new char[1][1]) ) );
         _pictureProcessorExposer.setPictures(pictureList);
@@ -235,24 +225,11 @@ public class PictureProcessorTest {
         assertEquals("Error", _errText.toString() );
     }
 
-    // Structured Basis 2: First if is false, else if is true
-    // Boundary 3: Picture list size greater than 1, stacked picture is null
-    @Test (expected=IllegalArgumentException.class)
-    public void testValidatePictureListBound3() {
-        ArrayList<Picture> pictureList = new ArrayList<>(Arrays.asList(
-                new Picture('A', new char[1][1]),
-                new Picture('A', new char[1][1]) ) );
-        _pictureProcessorExposer.setPictures(pictureList);
-        _pictureProcessorExposer.setFinalPicture(null);
 
-        _pictureProcessorExposer.validatePictureListExposed();
-        assertEquals("Error", _errText.toString() );
-    }
-
-    // Structured Basis 3: First if is false, else if is false
-    // Boundary 4: Picture list size greater than 1, stacked picture not null
+    //structured basis, boundary
+    //picture size > 1, final picture not null
     @Test
-    public void testValidatePictureListBound4() {
+    public void Should_not_error_if_picture_list_size_over_1_and_final_picture_not_null() {
         ArrayList<Picture> pictureList = new ArrayList<>(Arrays.asList(
                 new Picture('A', new char[1][1]),
                 new Picture('A', new char[1][1]) ) );
@@ -263,10 +240,15 @@ public class PictureProcessorTest {
         assertEquals("" , _errText.toString() );
     }
 
-    // Structured Basis 1: If is true
+
+    //createNewPicture
+
+
+    //structured basis
+    //enters branch
     @Test
-    public void testCreateNewPictureSB1() {
-        _pictureProcessorExposer.setPictures(new ArrayList<Picture>());
+    public void Should_add_new_picture_to_pictures_list_if_not_last_line() {
+        _pictureProcessorExposer.setPictures(new ArrayList<>());
         assertEquals(new ArrayList<Picture>(), _pictureProcessorExposer.getPictures() );
         _pictureProcessorExposer.setIsLastLine(false);
 
@@ -280,30 +262,35 @@ public class PictureProcessorTest {
         assertEquals('A', _pictureProcessorExposer.getPictures().get(0).getLetter() );
     }
 
-    // Structured Basis 2: If is false
+    // Structured Basis
+    // passes branch
     @Test
-    public void testCreateNewPictureSB2() {
+    public void Should_add_new_picture_as_final_picture_if_last_line() {
         _pictureProcessorExposer.setFinalPicture(new Picture('A', new char[1][1]) );
         assertEquals('A', _pictureProcessorExposer._getFinalPicture().getLetter());
-        // Because last line is set to true, this new picture will be a stacked
-        //  picture
+
         _pictureProcessorExposer.setIsLastLine(true);
 
         _pictureProcessorExposer.setRowCountAndColCount(1,1);
 
-        _pictureProcessorExposer.setLetters(new HashSet<Character>(
+        _pictureProcessorExposer.setLetters(new HashSet<>(
                 Arrays.asList('B') ) );
         _pictureProcessorExposer.setCurrPicture(
                 _pictureProcessorExposer.createNewTempPicture(
-                        new ArrayList<String>(Arrays.asList("B"))));
+                        new ArrayList<>(Arrays.asList("B"))));
 
         _pictureProcessorExposer.createNewPictureExposed();
         assertEquals('-', _pictureProcessorExposer._getFinalPicture().getLetter() );
     }
 
-    // Structured Basis 1: If is true
+
+    //processedTemporaryPicture
+
+
+    //structured basis
+    //enters 1st branch
     @Test
-    public void testProcessedTemporaryPictureSB1() {
+    public void Should_convert_temporary_picture_into_a_normal_picture() {
         _pictureProcessorExposer.setIsLastLine(false);
 
         _pictureProcessorExposer.setRowCountAndColCount(1,1);
@@ -313,14 +300,15 @@ public class PictureProcessorTest {
 
         _pictureProcessorExposer.setCurrPicture(
                 _pictureProcessorExposer.createNewTempPicture(
-                        new ArrayList<String>(Arrays.asList("A"))));
+                        new ArrayList<>(Arrays.asList("A"))));
         assertEquals(testPicture.getLetter(),
                 _pictureProcessorExposer.processTemporaryPictureExposed().getLetter());
     }
 
-    // Structured Basis 2: If is false
+    //structured basis
+    //passes 1st branch
     @Test (expected=IllegalArgumentException.class)
-    public void testProcessedTemporaryPictureSB2() {
+    public void Should_throw_error_if_temporary_picture_letter_is_pipe() {
         _pictureProcessorExposer.setIsLastLine(false);
 
         _pictureProcessorExposer.setRowCountAndColCount(1,1);
@@ -333,17 +321,23 @@ public class PictureProcessorTest {
         assertEquals("Error", _errText.toString());
     }
 
-    // Structured Basis 1: If is true
+
+    //pictureLetter
+
+
+    //structured Basis
+    //1st branch entered
     @Test
-    public void testImageLetterSB1() {
+    public void Should_return_picture_letter_for_a_non_final_picture_if_it_isnt_the_last_line() {
         _pictureProcessorExposer.setIsLastLine(false);
         char[][] testPictureMatrix = {{'A'}};
         assertEquals('A', _pictureProcessorExposer.pictureLetterExposed(testPictureMatrix) );
     }
 
-    // Structured Basis 2: If is false
+    //structured Basis
+    //1st branch passed
     @Test
-    public void testImageLetterSB2() {
+    public void Should_return_picture_letter_forthe_final_stacked_picture_if_we_are_at_the_last_line() {
         _pictureProcessorExposer.setIsLastLine(true);
         char[][] testPictureMatrix = {{'A'}};
         _pictureProcessorExposer.setLetters(new HashSet<>(
@@ -352,20 +346,30 @@ public class PictureProcessorTest {
         assertEquals('-', _pictureProcessorExposer.pictureLetterExposed(testPictureMatrix) );
     }
 
-    // Structured Basis 1: If is true
+
+    //pictureLetterForNonFinalPicture
+
+
+    // Structured Basis
+    // 1st branch entered
     @Test
-    public void testImageLetterForNonStackedPictureSB1() {
+    public void Should_return_the_unique_letter_of_the_image() {
         assertEquals('A', _pictureProcessorExposer.pictureLetterForNonFinalPictureExposed(
                 new HashSet<>(Arrays.asList('A') ) ) );
     }
 
-    // Structured Basis 2: If is false
+    // Structured Basis
+    // 1st branch passed
     @Test (expected=IllegalArgumentException.class)
-    public void testImageLetterForNonStackedPictureSB2() {
+    public void Should_error_if_multiple_unique_letters_are_within_an_image() {
         assertEquals('A', _pictureProcessorExposer.pictureLetterForNonFinalPictureExposed(
                 new HashSet<>(Arrays.asList('A', 'B') ) ) );
         assertEquals("Error", _errText.toString());
     }
+
+
+    //uniqueLetter
+
 
     // Structured Basis 1: If is true (add method returns false if the
     //  element already exists in the set, true otherwise)
